@@ -29,6 +29,7 @@ from gr00t.experiment.data_config import DATA_CONFIG_MAP
 from gr00t.experiment.runner import TrainRunner
 from gr00t.model.gr00t_n1 import GR00T_N1
 from gr00t.utils.peft import get_lora_model
+from security import safe_command
 
 
 @dataclass
@@ -264,4 +265,4 @@ if __name__ == "__main__":
             print("Running torchrun command: ", cmd)
             env = os.environ.copy()
             env["IS_TORCHRUN"] = "1"
-            sys.exit(subprocess.run(cmd, env=env).returncode)
+            sys.exit(safe_command.run(subprocess.run, cmd, env=env).returncode)
