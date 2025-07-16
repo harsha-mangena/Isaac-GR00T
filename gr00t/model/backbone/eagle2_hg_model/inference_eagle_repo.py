@@ -19,7 +19,6 @@ from io import BytesIO
 from typing import List, Union
 
 import numpy as np
-import requests
 import torch
 import torchvision.transforms as T
 from PIL import Image
@@ -29,6 +28,7 @@ from transformers.feature_extraction_utils import BatchFeature
 
 import gr00t
 from gr00t.model.backbone.eagle2_hg_model.conversation_repo import get_conv_template
+from security import safe_requests
 
 IMAGENET_MEAN = (0.485, 0.456, 0.406)
 IMAGENET_STD = (0.229, 0.224, 0.225)
@@ -112,7 +112,7 @@ def load_image(image):
         elif "base64" in image:
             return Image.open(BytesIO(base64.b64decode(image["base64"])))
         elif "url" in image:
-            response = requests.get(image["url"])
+            response = safe_requests.get(image["url"])
             return Image.open(BytesIO(response.content))
         elif "bytes" in image:
             return Image.open(BytesIO(image["bytes"]))
