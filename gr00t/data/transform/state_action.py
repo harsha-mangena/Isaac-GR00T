@@ -14,7 +14,6 @@
 # limitations under the License.
 
 import functools
-import random
 from typing import Any, ClassVar
 
 import numpy as np
@@ -24,6 +23,7 @@ from pydantic import Field, PrivateAttr, field_validator, model_validator
 
 from gr00t.data.schema import DatasetMetadata, RotationType, StateActionMetadata
 from gr00t.data.transform.base import InvertibleModalityTransform, ModalityTransform
+import secrets
 
 
 class RotationTransform:
@@ -579,7 +579,7 @@ class StateActionDropout(ModalityTransform):
         if self.dropout_prob < 0:
             # If the dropout probability is negative, we don't drop out any states
             return data
-        if self.dropout_prob > 1e-9 and random.random() < self.dropout_prob:
+        if self.dropout_prob > 1e-9 and secrets.SystemRandom().random() < self.dropout_prob:
             for key in self.apply_to:
                 state = data[key]
                 assert isinstance(state, torch.Tensor)
