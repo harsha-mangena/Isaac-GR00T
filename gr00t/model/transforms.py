@@ -13,7 +13,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import random
 from typing import Any, Dict, List, Optional
 
 import numpy as np
@@ -24,6 +23,7 @@ from transformers.data.data_collator import DataCollatorMixin
 from gr00t.data.schema import DatasetMetadata, EmbodimentTag
 from gr00t.data.transform.base import InvertibleModalityTransform
 from gr00t.model.backbone.eagle2_hg_model.inference_eagle_repo import EagleProcessor
+import secrets
 
 DEFAULT_SYSTEM_MESSAGE = "You are a helpful assistant."
 EAGLE_KEYS = ["pixel_values", "input_ids", "attention_mask"]
@@ -184,7 +184,7 @@ class GR00TTransform(InvertibleModalityTransform):
 
             # Language dropout
             if self.training and self.language_dropout_prob > 1e-9:
-                if random.random() < self.language_dropout_prob:
+                if secrets.SystemRandom().random() < self.language_dropout_prob:
                     raw_language = self.default_instruction
         else:
             raw_language = self.default_instruction
